@@ -1,11 +1,12 @@
-from pypdf import *
 from fpdf import *
-from reportlab.pdfgen.canvas import Canvas
 
 naam = input("Naam van het bedrijf: ")
 datum = input("Wat is de datum: ")
 factuurnummer = input("Wat is het factuurnummer: ")
 factuur_adres = input("Wat is het factuur adres: ")
+factuur_postcode = input("Wat is de postcode: ")
+relatienummer = input("Wat is je relatienummer? ")
+vervaldatum = datum
 logo_afbeelding = 'afbeeldingen/factuur_enzo_logo.png'
 
 # Create instance of FPDF class
@@ -26,15 +27,20 @@ pdf.image(logo_afbeelding, x=155, y=-6, w=50)  # pas x, y, en w aan volgens je b
 pdf.ln(20)
 # Add a paragraph
 pdf.cell(200, 6, txt = f"{naam}", ln = True, align = 'L')
-pdf.cell(200, 6, txt = f"{datum}", ln = True, align = 'L')
-pdf.cell(200, 6, txt = f"Factuurnummer: {factuurnummer}", ln = True, align = 'L')
-pdf.cell(200, 6, txt = f"Factuuradres: {factuur_adres}", ln = True, align = 'L')
+pdf.cell(200, 6, txt = f"{factuur_adres}", ln = True, align = 'L')
+pdf.cell(200, 6, txt = f"{factuur_postcode}", ln = True, align = 'L')
 
 pdf.set_y(40)
 pdf.cell(190, 6, txt = f"Factuur Enzo", ln = True, align = 'R')
 pdf.cell(190, 6, txt = f"+31 6123456789", ln = True, align = 'R')
 pdf.cell(190, 6, txt = f"factuurenzo@help.com", ln = True, align = 'R')
 pdf.cell(190, 6, txt = f"factuurenzo.nl", ln = True, align = 'R')
+
+
+pdf.cell(200, 6, txt = f"Datum: {datum}", ln = True, align = 'L')
+pdf.cell(200, 6, txt = f"Factuurnummer: {factuurnummer}", ln = True, align = 'L')
+pdf.cell(200, 6, txt = f"Relatienummer: {relatienummer}", ln = True, align = 'L')
+pdf.cell(200, 6, txt = f"Verval datum: {vervaldatum}", ln = True, align = 'L')
 
 # Save the PDF
 pdf_output = "my_pdf_document.pdf"
