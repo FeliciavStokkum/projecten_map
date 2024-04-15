@@ -10,4 +10,6 @@ from reportlab.pdfgen.canvas import Canvas
 # canvas = Canvas("test.pdf")
 # canvas.drawString(72, 72, "Hello, World!")s
 
-pdf = FPDF
+pdf = FPDF()
+pdf.add_page()
+pdf.set_font("Arial", "b", "24")
