@@ -18,7 +18,7 @@ pdf.set_font("Arial", size = 12)
 pdf.cell(200, 10, txt = "My PDF Document", ln = True, align = 'C')
 
 # Add a paragraph
-pdf.cell(200, 10, txt = f"mame: {naam}", ln = True, align = 'L')
+pdf.cell(200, 10, txt = f"name: {naam}", ln = True, align = 'L')
 
 # Add another paragraph
 pdf.cell(200, 10, txt = "This is another paragraph in the PDF.", ln = True, align = 'L')
