@@ -34,4 +34,4 @@ label_result = Label(root, text="")
 label_result.pack(pady=10)
 
 # Start de GUI
-root.mainloop()0
+root.mainloop()
