@@ -1,37 +1,37 @@
-from fpdf import FPDF
-from tkinter import *
+from pypdf import *
+from fpdf import *
+from reportlab.pdfgen.canvas import Canvas
 
-def create_pdf(input_text):
-    pdf = FPDF()
-    pdf.add_page()
-    pdf.set_font("Arial", size=12)
-    pdf.cell(200, 10, txt=input_text, ln=True, align='C')
-    pdf.output("MyPDF2.pdf")
-    label_result.config(text="PDF gegenereerd met de tekst: " + input_text)
+naam = ("Naam van het bedrijf: ")
+datum = ("Wat is de datum: ")
+factuurnummer = ("Wat is het factuurnummer: ")
+factuur_adres = ("Wat is het factuur adres: ")
+logo_afbeelding = 'afbeeldingen/factuur_enzo_logo.png'
 
-def get_input():
-    user_input = entry.get()
-    create_pdf(user_input)
+# Create instance of FPDF class
+pdf = FPDF()
 
-# Maak het hoofdvenster
-root = Tk()
-root.title("PDF Generator")
+# Add a page
+pdf.add_page()
 
-# Voeg een label toe
-label = Label(root, text="Voer tekst in voor het PDF-document:")
-label.pack(pady=10)
+# Set font for the title
+pdf.set_font("Arial", size = 12)
 
-# Voeg een tekstveld toe
-entry = Entry(root, width=50)
-entry.pack(pady=10)
+# Title
+pdf.cell(200, 10, txt = "Factuur", ln = True, align = 'C')
 
-# Voeg een knop toe
-button = Button(root, text="Genereer PDF", command=get_input)
-button.pack(pady=20)
+# Adding logo image
+pdf.image(logo_afbeelding, x=130, y=8, w=50)  # pas x, y, en w aan volgens je behoeften
 
-# Voeg een resultaat label toe
-label_result = Label(root, text="")
-label_result.pack(pady=10)
+# Add a paragraph
+pdf.cell(200, 10, txt = f"Naam: {naam}", ln = True, align = 'L')
+pdf.cell(200, 10, txt = f"Datum: {datum}", ln = True, align = 'L')
+pdf.cell(200, 10, txt = f"Factuurnummer: {factuurnummer}", ln = True, align = 'L')
+pdf.cell(200, 10, txt = f"Factuuradres: {factuur_adres}", ln = True, align = 'L')
 
-# Start de GUI
-root.mainloop()
+# Add another paragraph
+pdf.cell(200, 10, txt = "This is another paragraph in the PDF.", ln = True, align = 'L')
+
+# Save the PDF
+pdf_output = "my_pdf_document.pdf"
+pdf.output(pdf_output)
