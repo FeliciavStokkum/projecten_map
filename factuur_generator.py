@@ -1,11 +1,11 @@
 from fpdf import *
 
-naam = input("Naam van het bedrijf: ")
-datum = input("Wat is de datum: ")
-factuurnummer = input("Wat is het factuurnummer: ")
-factuur_adres = input("Wat is het factuur adres: ")
-factuur_postcode = input("Wat is de postcode: ")
-relatienummer = input("Wat is je relatienummer? ")
+naam = ("Naam: ")
+datum = ("Datum van vandaag: ")
+factuurnummer = ("Factuurnummer: ")
+factuur_adres = ("Factuur adres:  ")
+factuur_postcode = ("Postcode: ")
+relatienummer = ("Relatienummer: ")
 vervaldatum = datum
 logo_afbeelding = 'afbeeldingen/factuur_enzo_logo.png'
 data = [['Beschrijving', 'Aantal', 'Eenheid', 'Tarief', 'BTW%', 'BTW', 'Totaal'],
@@ -49,9 +49,46 @@ pdf.set_y(100)
 for row in data:
     for item in row:
         # Add cell with padding
-        pdf.cell(40, 10, txt=item, border=1)
+        pdf.cell(27, 10, txt=item, border=1)
     pdf.ln()
 
-# Save the PDF
+pdf.cell(170, 5, txt="Bedrag excl BTW: ", ln=True, align='R') 
+pdf.cell(170, 5, txt="BTW: ", ln=True, align='R')
+pdf.cell(170, 5, txt="Totaal bedrag: ", ln=True, align='R')
+
+#Voegt een horizontale lijn onderaan de pagina toe
+pdf.set_draw_color(0, 0, 0)  
+y_position = 245 # De y-coördinaat voor de lijn (iets boven de onderkant van een A4-pagina, die 297 mm hoog is)
+pdf.line(10, y_position, 200, y_position) 
+
+# Stel de positie in net onder de getekende lijn
+pdf.set_y(y_position + 5)
+# Voeg tekst toe onder de lijn
+pdf.set_font("Arial", 'B', 8)
+pdf.cell(0, 5, 'Factuur enzo', ln=True)
+pdf.set_font("Arial", size=8) 
+pdf.cell(0, 5, 'Leerparkpromenade 100', ln=True) 
+pdf.cell(0, 5, '3312 KW Dordrecht', ln=True)
+pdf.cell(0, 5, 'BTW nummer: 111234567B01', ln=True)
+pdf.cell(0, 5, 'KVK nummer: 9305 6589', ln=True)
+
+pdf.set_y(y_position + 5) 
+pdf.set_font("Arial", 'B', 8)
+pdf.cell(0, 5, 'Contact informatie', ln=True, align='C')
+pdf.set_font("Arial", size=8) 
+pdf.cell(0, 5, 'contactpersonen: Felicia en Bent', ln=True, align='C') 
+pdf.cell(0, 5, 'Telefoon: +31 6123456789', ln=True, align='C')
+pdf.cell(0, 5, 'Email: factuurenzo@help.com', ln=True, align='C')
+pdf.cell(0, 5, 'website: factuurenzo.nl', ln=True, align='C')
+
+pdf.set_y(y_position + 5) 
+pdf.set_font("Arial", 'B', 8)
+pdf.cell(0, 5, 'Betaalgegevens', ln=True, align='R')
+pdf.set_font("Arial", size=8) 
+pdf.cell(0, 5, 'Bank: RaboBank', ln=True, align='R') 
+pdf.cell(0, 5, 'BIC nummer: RABONL2U', ln=True, align='R')
+pdf.cell(0, 5, 'IBAN nummer: NL44 RABO 0123 4567 89', ln=True, align='R')
+
+#De PDF wordt opgeslagen
 pdf_output = "my_pdf_document.pdf"
 pdf.output(pdf_output)
