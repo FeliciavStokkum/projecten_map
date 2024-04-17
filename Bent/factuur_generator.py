@@ -23,6 +23,9 @@ uren_btw = round(uren_prijs * 0.21, 2)
 producten_btw = round(producten_prijs * 0.21, 2)
 uren_prijs_totaal = uren_prijs + uren_btw
 producten_prijs_totaal = producten_prijs + producten_btw
+beide_prijs = round(uren_prijs + producten_prijs,2 )
+beide_btw = round(uren_btw + producten_btw, 2)
+beide_prijs_totaal = round(uren_prijs_totaal + producten_prijs_totaal, 2)
 
 vervaldatum = datum
 logo_afbeelding = 'afbeeldingen/factuur_enzo_logo.png'
@@ -70,9 +73,9 @@ for row in data:
         pdf.cell(27, 10, txt=item, border=1)
     pdf.ln()
 
-pdf.cell(170, 5, txt="Bedrag excl BTW: ", ln=True, align='R') 
-pdf.cell(170, 5, txt="BTW: ", ln=True, align='R')
-pdf.cell(170, 5, txt="Totaal bedrag: ", ln=True, align='R')
+pdf.cell(170, 5, txt=f"Bedrag excl BTW: {beide_prijs}", ln=True, align='R') 
+pdf.cell(170, 5, txt=f"BTW: {beide_btw}", ln=True, align='R')
+pdf.cell(170, 5, txt=f"Totaal bedrag: {beide_prijs_totaal}", ln=True, align='R')
 
 #Voegt een horizontale lijn onderaan de pagina toe
 pdf.set_draw_color(0, 0, 0)  
