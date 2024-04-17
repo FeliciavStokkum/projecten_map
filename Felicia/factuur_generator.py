@@ -6,7 +6,7 @@ import datetime
 
 pdf = FPDF()
 pdf.add_page()
-data_json = json.load(open("Felicia/test_set_PC/2024-075.json"))
+data_json = json.load(open("Felicia/test_set_PC/2020-375.json"))
 
 
 naam = data_json["factuur"]["klant"]["naam"]
@@ -18,28 +18,25 @@ factuur_postcode = data_json["factuur"]["klant"]["postcode"]
 factuur_stad = data_json["factuur"]["klant"]["stad"]
 betaaltermijn_str = data_json["factuur"]["betaaltermijn"]
 betaaltermijn_dagen = int(betaaltermijn_str.split('-')[0])
+bedrag_excl_btw = 0
+bedrag_btw = 0
+bedrag_totaal = 0
 
 kosten_uren = 60
 kosten_product = 106
 
-# uren_prijs = uren * kosten_uren
-# producten_prijs = producten * kosten_product
-# uren_btw = round(uren_prijs * 0.21, 2)
-# producten_btw = round(producten_prijs * 0.21, 2)
-# uren_prijs_totaal = uren_prijs + uren_btw
-# # producten_prijs_totaal = producten_prijs + producten_btw
-# # beide_prijs = round(uren_prijs + producten_prijs,2 )
-# beide_btw = round(uren_btw + producten_btw, 2)
-# beide_prijs_totaal = round(uren_prijs_totaal + producten_prijs_totaal, 2)
-
 vervaldatum = datum + datetime.timedelta(days=betaaltermijn_dagen)
 logo_afbeelding = 'afbeeldingen/factuur_enzo_logo.png'
-data = [['Beschrijving', 'Aantal', 'Eenheid', 'BTW%', 'BTW', 'prijs per stuk excl BTW', 'Totaal']]
-#['Uren', f'{uren}', 'uur', f'{kosten_uren} EUR', '21%', f'{uren_btw} EUR', f'{uren_prijs_totaal} EUR']]
+data = [['Beschrijving', 'Aantal', 'Eenheid', 'BTW%', 'BTW', 'pr excl BTW', 'Totaal']]
+        #['Uren', f'{uren}', 'uur', f'{kosten_uren} EUR', '21%', f'{uren_btw} EUR', f'{uren_prijs_totaal} EUR']]
 
 for item in data_json["factuur"]["producten"]:
-    data.append(['Producten', f'{item["aantal"]}', f'{item["productnaam"]}', f'{100 / item["prijs_per_stuk_excl_btw"] * item["btw_per_stuk"]}', f'{item["btw_per_stuk"]}', f'{item["prijs_per_stuk_excl_btw"]}', f'{item["aantal"] * (item["prijs_per_stuk_excl_btw"] + item["btw_per_stuk"])}'])
-
+    productnaam = item["productnaam"][:11-3] + "..."
+    bedrag_excl_btw += item["prijs_per_stuk_excl_btw"]
+    bedrag_btw += item["btw_per_stuk"]
+    data.append(['Producten', f'{item["aantal"]}', f'{productnaam}', f'{round(100 / item["prijs_per_stuk_excl_btw"] * item["btw_per_stuk"], 2)}', f'{item["btw_per_stuk"]}', f'{item["prijs_per_stuk_excl_btw"]}', f'{round(item["aantal"] * (item["prijs_per_stuk_excl_btw"] + item["btw_per_stuk"]), 2)}'])
+bedrag_btw = round(bedrag_btw, 2)
+bedrag_totaal = round(bedrag_excl_btw + bedrag_btw, 2)
 
 pdf.set_font("Arial", size=25) 
 pdf.cell(30, 10, txt = "Factuur", ln = True, align = 'C')
@@ -86,24 +83,19 @@ left_column_width = 150  # Stel de breedte van de linkerkolom in
 # Bedrag exclusief BTW
 pdf.cell(left_column_width, 10, txt="Bedrag excl. BTW:", align='R')
 pdf.set_font("Arial", size=12) 
-# pdf.cell(right_column_width, 10, txt=f"{beide_prijs}", ln=True, align='R')
+pdf.cell(right_column_width, 10, txt=f"{bedrag_excl_btw}", ln=True, align='R')
 
 # BTW
 pdf.set_font("Arial", 'B',  size=12) 
 pdf.cell(left_column_width, 10, txt="BTW:", align='R')
 pdf.set_font("Arial", size=12)
-# pdf.cell(right_column_width, 10, txt=f"{beide_btw}", ln=True, align='R')
+pdf.cell(right_column_width, 10, txt=f"{bedrag_btw}", ln=True, align='R')
 
 # Totaal bedrag
 pdf.set_font("Arial", 'B',  size=12) 
 pdf.cell(left_column_width, 10, txt="Totaal bedrag:", align='R')
 pdf.set_font("Arial", size=12)
-# pdf.cell(right_column_width, 10, txt=f"{beide_prijs_totaal}", ln=True, align='R')
-
-
-# pdf.cell(170, 5, txt=f"Bedrag excl BTW: {beide_prijs}", ln=True, align='R') 
-# pdf.cell(170, 5, txt=f"BTW: {beide_btw}", ln=True, align='R')
-# pdf.cell(170, 5, txt=f"Totaal bedrag: {beide_prijs_totaal}", ln=True, align='R')
+pdf.cell(right_column_width, 10, txt=f"{bedrag_totaal}", ln=True, align='R')
 
 #Voegt een horizontale lijn onderaan de pagina toe
 pdf.set_draw_color(0, 0, 0)  
