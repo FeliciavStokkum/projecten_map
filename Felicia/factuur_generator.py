@@ -2,15 +2,22 @@
 #opmaak verbeteren
 
 from fpdf import FPDF
-import _json
+import json
+import datetime
 
-naam = ("Naam: ")
-datum = ("Datum van vandaag: ")
-factuurnummer = ("Factuurnummer: ")
-#stad toevoegen
-factuur_adres = ("Factuur adres:  ")
-factuur_postcode = ("Postcode: ")
-relatienummer = ("Relatienummer: ")
+data_json = json.load(open("Felicia/test_set_PC/2024-075.json"))
+
+
+naam = data_json["factuur"]["klant"]["naam"]
+datum = datetime.date.today()
+kvk_nummer = data_json["factuur"]["klant"]["KVK-nummer"]
+factuurnummer = data_json["factuur"]["factuurnummer"]
+factuur_adres = data_json["factuur"]["klant"]["adres"]
+factuur_postcode = data_json["factuur"]["klant"]["postcode"]
+factuur_stad = data_json["factuur"]["klant"]["stad"]
+betaaltermijn_str = data_json["factuur"]["betaaltermijn"]
+betaaltermijn_dagen = int(betaaltermijn_str.split('-')[0])
+
 uren = int(input("Hoeveel uur: "))
 producten = int(input("Hoeveel producten: "))
 
@@ -27,8 +34,7 @@ beide_prijs = round(uren_prijs + producten_prijs,2 )
 beide_btw = round(uren_btw + producten_btw, 2)
 beide_prijs_totaal = round(uren_prijs_totaal + producten_prijs_totaal, 2)
 
-
-vervaldatum = datum
+vervaldatum = datum + datetime.timedelta(days=betaaltermijn_dagen)
 logo_afbeelding = 'afbeeldingen/factuur_enzo_logo.png'
 
 header_data = ['beschrijving', 'aantal', 'eenheid', 'tarief', 'BTW', 'Totaal']
@@ -52,11 +58,12 @@ pdf.set_font("Arial", size = 12)
 # Adding logo image
 pdf.image(logo_afbeelding, x=155, y=-6, w=50)  # pas x, y, en w aan volgens je behoeften
 
-pdf.ln(20)
+pdf.ln(10)
 # Add a paragraph
 pdf.cell(200, 6, txt = f"{naam}", ln = True, align = 'L')
 pdf.cell(200, 6, txt = f"{factuur_adres}", ln = True, align = 'L')
 pdf.cell(200, 6, txt = f"{factuur_postcode}", ln = True, align = 'L')
+pdf.cell(200, 6, txt = f"{factuur_stad}", ln = True, align = 'L')
 
 pdf.set_y(40)
 pdf.cell(190, 6, txt = f"Factuur Enzo", ln = True, align = 'R')
@@ -64,10 +71,11 @@ pdf.cell(190, 6, txt = f"+31 6123456789", ln = True, align = 'R')
 pdf.cell(190, 6, txt = f"factuurenzo@help.com", ln = True, align = 'R')
 pdf.cell(190, 6, txt = f"factuurenzo.nl", ln = True, align = 'R')
 
+pdf.set_y(70)
 pdf.cell(200, 6, txt = f"Datum: {datum}", ln = True, align = 'L')
-pdf.cell(200, 6, txt = f"Factuurnummer: {factuurnummer}", ln = True, align = 'L')
-pdf.cell(200, 6, txt = f"Relatienummer: {relatienummer}", ln = True, align = 'L')
+pdf.cell(200, 6, txt = f"factuurnummer: {factuurnummer}", ln = True, align = 'L')
 pdf.cell(200, 6, txt = f"Verval datum: {vervaldatum}", ln = True, align = 'L')
+pdf.cell(200, 6, txt = f"KVK nummer: {kvk_nummer}", ln = True, align = 'L')
 
 pdf.set_y(100)
 for row in data:
