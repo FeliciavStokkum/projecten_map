@@ -1,16 +1,16 @@
 #Calculaties
 #Qr code maken
 #opmaak verbeteren
-#inputs werk en producten
+#s werk en producten
 
 from fpdf import FPDF
 
-naam = input("Naam: ")
-datum = input("Datum van vandaag: ")
-factuurnummer = input("Factuurnummer: ")
-factuur_adres = input("Factuur adres:  ")
-factuur_postcode = input("Postcode: ")
-relatienummer = input("Relatienummer: ")
+naam = ("Naam: ")
+datum = ("Datum van vandaag: ")
+factuurnummer = ("Factuurnummer: ")
+factuur_adres = ("Factuur adres:  ")
+factuur_postcode = ("Postcode: ")
+relatienummer = ("Relatienummer: ")
 uren = int(input("Hoeveel uur: "))
 producten = int(input("Hoeveel producten: "))
 vervaldatum = datum
@@ -97,5 +97,5 @@ pdf.cell(0, 5, 'BIC nummer: RABONL2U', ln=True, align='R')
 pdf.cell(0, 5, 'IBAN nummer: NL44 RABO 0123 4567 89', ln=True, align='R')
 
 #De PDF wordt opgeslagen
-pdf_output = "my_pdf_document.pdf"
+pdf_output = "my_pdf_Felicia.pdf"
 pdf.output(pdf_output)
