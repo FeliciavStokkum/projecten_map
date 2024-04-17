@@ -2,10 +2,12 @@
 #opmaak verbeteren
 
 from fpdf import FPDF
+import _json
 
 naam = ("Naam: ")
 datum = ("Datum van vandaag: ")
 factuurnummer = ("Factuurnummer: ")
+#stad toevoegen
 factuur_adres = ("Factuur adres:  ")
 factuur_postcode = ("Postcode: ")
 relatienummer = ("Relatienummer: ")
@@ -29,10 +31,10 @@ beide_prijs_totaal = round(uren_prijs_totaal + producten_prijs_totaal, 2)
 vervaldatum = datum
 logo_afbeelding = 'afbeeldingen/factuur_enzo_logo.png'
 
-pdf.set_font("Arial", size=12, 'B')
 header_data = ['beschrijving', 'aantal', 'eenheid', 'tarief', 'BTW', 'Totaal']
 
-data = [['Uren', f'{uren}', 'uur', f'{kosten_uren}', '21%', f'{uren_btw}', f'{uren_prijs_totaal}'],
+data = [['Beschrijving', 'Aantal', 'Eenheid', 'Tarief', 'BTW%', 'BTW', 'Totaal'],
+        ['Uren', f'{uren}', 'uur', f'{kosten_uren}', '21%', f'{uren_btw}', f'{uren_prijs_totaal}'],
         ['Producten', f'{producten}', 'stuk', f'{kosten_product}', '21%', f'{producten_btw}', f'{producten_prijs_totaal}']]
 
 # Create instance of FPDF class
