@@ -5,20 +5,20 @@
 
 from fpdf import FPDF
 
-naam = ("Naam: ")
-datum = ("Datum van vandaag: ")
-factuurnummer = ("Factuurnummer: ")
-factuur_adres = ("Factuur adres:  ")
-factuur_postcode = ("Postcode: ")
-relatienummer = ("Relatienummer: ")
-uren = input("Hoeveel uur: ")
-producten = input("Hoeveel producten: ")
+naam = input("Naam: ")
+datum = input("Datum van vandaag: ")
+factuurnummer = input("Factuurnummer: ")
+factuur_adres = input("Factuur adres:  ")
+factuur_postcode = input("Postcode: ")
+relatienummer = input("Relatienummer: ")
+uren = int(input("Hoeveel uur: "))
+producten = int(input("Hoeveel producten: "))
 vervaldatum = datum
 logo_afbeelding = 'afbeeldingen/factuur_enzo_logo.png'
 
 data = [['Beschrijving', 'Aantal', 'Eenheid', 'Tarief', 'BTW%', 'BTW', 'Totaal'],
-        ['Uren', f'{uren}', 'uur', 'xx', '21%', 'xx', 'xx'],
-        ['Producten', f'{producten}', 'stuk', 'xx', '21%', 'xx', 'xx']]
+        ['Uren', f'{uren}', 'uur', '60,- euro', '21%', 'xx', 'xx'],
+        ['Producten', f'{producten}', 'stuk', '105,- euro', '21%', 'xx', 'xx']]
 
 # Create instance of FPDF class
 pdf = FPDF()
