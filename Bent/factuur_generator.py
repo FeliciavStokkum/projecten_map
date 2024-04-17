@@ -6,9 +6,15 @@
 from fpdf import FPDF
 import json
 
-data_json = json.load(open('test_2000-899.json'))
+data_json = json.load(open('Bent/test_set_PC/2000-961.json'))
+# klant
+klant_naam = (data_json["factuur"]["klant"]["naam"])
+klant_adres =  (data_json["factuur"]["klant"]["adres"])
+klant_postcode = (data_json["factuur"]["klant"]["postcode"])
+klant_stad = (data_json["factuur"]["klant"]["stad"])
+klant_kvk_nummer = (data_json["factuur"]["klant"]["KVK-nummer"])
 
-naam = (data_json["order"])
+#factuur
 datum = ("Datum van vandaag: ")
 factuurnummer = ("Factuurnummer: ")
 factuur_adres = ("Factuur adres:  ")
@@ -32,9 +38,11 @@ beide_prijs_totaal = round(uren_prijs_totaal + producten_prijs_totaal, 2)
 
 vervaldatum = datum
 logo_afbeelding = 'afbeeldingen/factuur_enzo_logo.png'
-data = [['Beschrijving', 'Aantal', 'Eenheid', 'Tarief', 'BTW%', 'BTW', 'Totaal'],
-        ['Uren', f'{uren}', 'uur', f'{kosten_uren} EUR', '21%', f'{uren_btw} EUR', f'{uren_prijs_totaal} EUR'],
-        ['Producten', f'{producten}', 'stuk', f'{kosten_product} EUR', '21%', f'{producten_btw} EUR', f'{producten_prijs_totaal} EUR']]
+data = [['Beschrijving', 'Aantal', 'Eenheid', 'BTW%', 'BTW', 'prijs per stuk excl BTW', 'Totaal']]
+        #['Uren', f'{uren}', 'uur', f'{kosten_uren} EUR', '21%', f'{uren_btw} EUR', f'{uren_prijs_totaal} EUR']]
+
+for item in data_json["factuur"]["producten"]:
+    data.append(['Producten', f'{item["aantal"]}', f'{item["productnaam"]}', f'{100 / item["prijs_per_stuk_excl_btw"] * item["btw_per_stuk"]}', f'{item["btw_per_stuk"]}', f'{item["prijs_per_stuk_excl_btw"]}', f'{item["aantal"] * (item["prijs_per_stuk_excl_btw"] + item["btw_per_stuk"])}'])
 
 # Create instance of FPDF class
 pdf = FPDF()
@@ -53,7 +61,7 @@ pdf.image(logo_afbeelding, x=155, y=-6, w=50)  # pas x, y, en w aan volgens je b
 
 pdf.ln(20)
 # Add a paragraph
-pdf.cell(200, 6, txt = f"{naam}", ln = True, align = 'L')
+pdf.cell(200, 6, txt = f"{klant_naam}", ln = True, align = 'L')
 pdf.cell(200, 6, txt = f"{factuur_adres}", ln = True, align = 'L')
 pdf.cell(200, 6, txt = f"{factuur_postcode}", ln = True, align = 'L')
 
@@ -68,6 +76,7 @@ pdf.cell(200, 6, txt = f"Factuurnummer: {factuurnummer}", ln = True, align = 'L'
 pdf.cell(200, 6, txt = f"Relatienummer: {relatienummer}", ln = True, align = 'L')
 pdf.cell(200, 6, txt = f"Verval datum: {vervaldatum}", ln = True, align = 'L')
 
+pdf.set_font("Arial", size=7)
 pdf.set_y(100)
 for row in data:
     for item in row:
@@ -75,6 +84,7 @@ for row in data:
         pdf.cell(27, 10, txt=item, border=1)
     pdf.ln()
 
+pdf.set_font("Arial", size=12)
 pdf.cell(170, 5, txt=f"Bedrag excl BTW: {beide_prijs} EUR", ln=True, align='R') 
 pdf.cell(170, 5, txt=f"BTW: {beide_btw} EUR", ln=True, align='R')
 pdf.cell(170, 5, txt=f"Totaal bedrag: {beide_prijs_totaal} EUR", ln=True, align='R')
