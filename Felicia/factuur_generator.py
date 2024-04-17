@@ -21,14 +21,16 @@ uren_prijs = uren * kosten_uren
 producten_prijs = producten * kosten_product
 uren_btw = round(uren_prijs * 0.21, 2)
 producten_btw = round(producten_prijs * 0.21, 2)
+uren_prijs_totaal = uren_prijs + uren_btw
+producten_prijs_totaal = producten_prijs + producten_btw
 
 
 vervaldatum = datum
 logo_afbeelding = 'afbeeldingen/factuur_enzo_logo.png'
 
 data = [['Beschrijving', 'Aantal', 'Eenheid', 'Tarief', 'BTW%', 'BTW', 'Totaal'],
-        ['Uren', f'{uren}', 'uur', f'{kosten_uren}', '21%', f'{uren_btw}', f'{uren_prijs}'],
-        ['Producten', f'{producten}', 'stuk', f'{kosten_product}', '21%', f'{producten_btw}', f'{producten_prijs}']]
+        ['Uren', f'{uren}', 'uur', f'{kosten_uren}', '21%', f'{uren_btw}', f'{uren_prijs_totaal}'],
+        ['Producten', f'{producten}', 'stuk', f'{kosten_product}', '21%', f'{producten_btw}', f'{producten_prijs_totaal}']]
 
 # Create instance of FPDF class
 pdf = FPDF()
