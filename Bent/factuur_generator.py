@@ -11,14 +11,18 @@ factuurnummer = ("Factuurnummer: ")
 factuur_adres = ("Factuur adres:  ")
 factuur_postcode = ("Postcode: ")
 relatienummer = ("Relatienummer: ")
-uren = input("Hoeveel uur: ")
-producten = input("Hoeveel producten: ")
+uren = int(input("Hoeveel uur: "))
+producten = int(input("Hoeveel producten: "))
+kosten_uren = 60
+kosten_product = 106
+uren_prijs = uren * kosten_uren
+producten_prijs = producten * kosten_product
 vervaldatum = datum
 logo_afbeelding = 'afbeeldingen/factuur_enzo_logo.png'
 
 data = [['Beschrijving', 'Aantal', 'Eenheid', 'Tarief', 'BTW%', 'BTW', 'Totaal'],
-        ['Uren', uren, 'uur', 'xx', '21%', 'xx', 'xx'],
-        ['Producten', producten, 'stuk', 'xx', '21%', 'xx', 'xx']]
+        ['Uren', f'{uren}', 'uur', f'{kosten_uren}', '21%', f'{uren_prijs}', 'xx'],
+        ['Producten', f'{producten}', 'stuk', f'{kosten_product}', '21%', f'{producten_prijs}', 'xx']]
 
 # Create instance of FPDF class
 pdf = FPDF()
