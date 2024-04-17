@@ -6,7 +6,7 @@ import datetime
 
 pdf = FPDF()
 pdf.add_page()
-data_json = json.load(open("Felicia/test_set_PC/2020-375.json"))
+data_json = json.load(open("Felicia/test_set_PC/2024-978.json"))
 
 
 naam = data_json["factuur"]["klant"]["naam"]
@@ -27,7 +27,7 @@ kosten_product = 106
 
 vervaldatum = datum + datetime.timedelta(days=betaaltermijn_dagen)
 logo_afbeelding = 'afbeeldingen/factuur_enzo_logo.png'
-data = [['Beschrijving', 'Aantal', 'Eenheid', 'BTW%', 'BTW', 'pr excl BTW', 'Totaal']]
+data = [['Beschrijving', 'Aantal', 'Eenheid', 'BTW%', 'BTW', 'excl BTW', 'Totaal']]
         #['Uren', f'{uren}', 'uur', f'{kosten_uren} EUR', '21%', f'{uren_btw} EUR', f'{uren_prijs_totaal} EUR']]
 
 for item in data_json["factuur"]["producten"]:
