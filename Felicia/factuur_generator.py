@@ -1,7 +1,7 @@
 #Calculaties
 #Qr code maken
 #opmaak verbeteren
-#inputs werk en producten
+#s werk en producten
 
 from fpdf import FPDF
 
@@ -11,14 +11,24 @@ factuurnummer = ("Factuurnummer: ")
 factuur_adres = ("Factuur adres:  ")
 factuur_postcode = ("Postcode: ")
 relatienummer = ("Relatienummer: ")
-uren = input("Hoeveel uur: ")
-producten = input("Hoeveel producten: ")
+uren = int(input("Hoeveel uur: "))
+producten = int(input("Hoeveel producten: "))
+
+kosten_uren = 60
+kosten_product = 106
+
+uren_prijs = uren * kosten_uren
+producten_prijs = producten * kosten_product
+uren_btw = round(uren_prijs * 0.21, 2)
+producten_btw = round(producten_prijs * 0.21, 2)
+
+
 vervaldatum = datum
 logo_afbeelding = 'afbeeldingen/factuur_enzo_logo.png'
 
 data = [['Beschrijving', 'Aantal', 'Eenheid', 'Tarief', 'BTW%', 'BTW', 'Totaal'],
-        ['Uren', f'{uren}', 'uur', 'xx', '21%', 'xx', 'xx'],
-        ['Producten', f'{producten}', 'stuk', 'xx', '21%', 'xx', 'xx']]
+        ['Uren', f'{uren}', 'uur', f'{kosten_uren}', '21%', f'{uren_btw}', f'{uren_prijs}'],
+        ['Producten', f'{producten}', 'stuk', f'{kosten_product}', '21%', f'{producten_btw}', f'{producten_prijs}']]
 
 # Create instance of FPDF class
 pdf = FPDF()
@@ -97,5 +107,5 @@ pdf.cell(0, 5, 'BIC nummer: RABONL2U', ln=True, align='R')
 pdf.cell(0, 5, 'IBAN nummer: NL44 RABO 0123 4567 89', ln=True, align='R')
 
 #De PDF wordt opgeslagen
-pdf_output = "my_pdf_document.pdf"
+pdf_output = "my_pdf_Felicia.pdf"
 pdf.output(pdf_output)
