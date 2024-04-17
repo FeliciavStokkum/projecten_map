@@ -13,6 +13,9 @@ klant_adres =  (data_json["factuur"]["klant"]["adres"])
 klant_postcode = (data_json["factuur"]["klant"]["postcode"])
 klant_stad = (data_json["factuur"]["klant"]["stad"])
 klant_kvk_nummer = (data_json["factuur"]["klant"]["KVK-nummer"])
+bedrag_excl_btw = 0
+bedrag_btw = 0
+bedrag_totaal = 0
 
 #factuur
 datum = ("Datum van vandaag: ")
@@ -20,8 +23,8 @@ factuurnummer = ("Factuurnummer: ")
 factuur_adres = ("Factuur adres:  ")
 factuur_postcode = ("Postcode: ")
 relatienummer = ("Relatienummer: ")
-uren = int(input("Hoeveel uur: "))
-producten = int(input("Hoeveel producten: "))
+uren = (1)
+producten = (1)
 
 kosten_uren = 60
 kosten_product = 106
@@ -38,12 +41,16 @@ beide_prijs_totaal = round(uren_prijs_totaal + producten_prijs_totaal, 2)
 
 vervaldatum = datum
 logo_afbeelding = 'afbeeldingen/factuur_enzo_logo.png'
-data = [['Beschrijving', 'Aantal', 'Eenheid', 'BTW%', 'BTW', 'prijs per stuk excl BTW', 'Totaal']]
+data = [['Beschrijving', 'Aantal', 'Eenheid', 'BTW%', 'BTW', 'pr excl BTW', 'Totaal']]
         #['Uren', f'{uren}', 'uur', f'{kosten_uren} EUR', '21%', f'{uren_btw} EUR', f'{uren_prijs_totaal} EUR']]
 
 for item in data_json["factuur"]["producten"]:
-    data.append(['Producten', f'{item["aantal"]}', f'{item["productnaam"]}', f'{100 / item["prijs_per_stuk_excl_btw"] * item["btw_per_stuk"]}', f'{item["btw_per_stuk"]}', f'{item["prijs_per_stuk_excl_btw"]}', f'{item["aantal"] * (item["prijs_per_stuk_excl_btw"] + item["btw_per_stuk"])}'])
-
+    productnaam = item["productnaam"][:11-3] + "..."
+    bedrag_excl_btw += item["prijs_per_stuk_excl_btw"]
+    bedrag_btw += item["btw_per_stuk"]
+    data.append(['Producten', f'{item["aantal"]}', f'{productnaam}', f'{round(100 / item["prijs_per_stuk_excl_btw"] * item["btw_per_stuk"], 2)}', f'{item["btw_per_stuk"]}', f'{item["prijs_per_stuk_excl_btw"]}', f'{round(item["aantal"] * (item["prijs_per_stuk_excl_btw"] + item["btw_per_stuk"]), 2)}'])
+bedrag_btw = round(bedrag_btw, 2)
+bedrag_totaal = round(bedrag_excl_btw + bedrag_btw, 2)
 # Create instance of FPDF class
 pdf = FPDF()
 
@@ -76,7 +83,7 @@ pdf.cell(200, 6, txt = f"Factuurnummer: {factuurnummer}", ln = True, align = 'L'
 pdf.cell(200, 6, txt = f"Relatienummer: {relatienummer}", ln = True, align = 'L')
 pdf.cell(200, 6, txt = f"Verval datum: {vervaldatum}", ln = True, align = 'L')
 
-pdf.set_font("Arial", size=7)
+pdf.set_font("Arial", size=12)
 pdf.set_y(100)
 for row in data:
     for item in row:
@@ -85,9 +92,9 @@ for row in data:
     pdf.ln()
 
 pdf.set_font("Arial", size=12)
-pdf.cell(170, 5, txt=f"Bedrag excl BTW: {beide_prijs} EUR", ln=True, align='R') 
-pdf.cell(170, 5, txt=f"BTW: {beide_btw} EUR", ln=True, align='R')
-pdf.cell(170, 5, txt=f"Totaal bedrag: {beide_prijs_totaal} EUR", ln=True, align='R')
+pdf.cell(170, 5, txt=f"Bedrag excl BTW: {bedrag_excl_btw} EUR", ln=True, align='R') 
+pdf.cell(170, 5, txt=f"BTW: {bedrag_btw} EUR", ln=True, align='R')
+pdf.cell(170, 5, txt=f"Totaal bedrag: {bedrag_totaal} EUR", ln=True, align='R')
 
 #Voegt een horizontale lijn onderaan de pagina toe
 pdf.set_draw_color(0, 0, 0)  
