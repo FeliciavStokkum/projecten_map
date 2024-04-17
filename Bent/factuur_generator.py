@@ -4,8 +4,11 @@
 #inputs werk en producten
 
 from fpdf import FPDF
+import json
 
-naam = ("Naam: ")
+data_json = json.load(open('test_2000-899.json'))
+
+naam = (data_json["order"])
 datum = ("Datum van vandaag: ")
 factuurnummer = ("Factuurnummer: ")
 factuur_adres = ("Factuur adres:  ")

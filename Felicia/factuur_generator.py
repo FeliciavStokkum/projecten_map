@@ -29,7 +29,7 @@ beide_prijs_totaal = round(uren_prijs_totaal + producten_prijs_totaal, 2)
 vervaldatum = datum
 logo_afbeelding = 'afbeeldingen/factuur_enzo_logo.png'
 
-pdf.set_font("Arial", size=12, 'B')
+# pdf.set_font("Arial", size=12, 'B')
 header_data = ['beschrijving', 'aantal', 'eenheid', 'tarief', 'BTW', 'Totaal']
 
 data = [['Uren', f'{uren}', 'uur', f'{kosten_uren}', '21%', f'{uren_btw}', f'{uren_prijs_totaal}'],
