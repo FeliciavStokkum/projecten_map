@@ -1,7 +1,5 @@
-#Calculaties
 #Qr code maken
 #opmaak verbeteren
-#s werk en producten
 
 from fpdf import FPDF
 
@@ -23,13 +21,18 @@ uren_btw = round(uren_prijs * 0.21, 2)
 producten_btw = round(producten_prijs * 0.21, 2)
 uren_prijs_totaal = uren_prijs + uren_btw
 producten_prijs_totaal = producten_prijs + producten_btw
+beide_prijs = round(uren_prijs + producten_prijs,2 )
+beide_btw = round(uren_btw + producten_btw, 2)
+beide_prijs_totaal = round(uren_prijs_totaal + producten_prijs_totaal, 2)
 
 
 vervaldatum = datum
 logo_afbeelding = 'afbeeldingen/factuur_enzo_logo.png'
 
-data = [['Beschrijving', 'Aantal', 'Eenheid', 'Tarief', 'BTW%', 'BTW', 'Totaal'],
-        ['Uren', f'{uren}', 'uur', f'{kosten_uren}', '21%', f'{uren_btw}', f'{uren_prijs_totaal}'],
+pdf.set_font("Arial", size=12, 'B')
+header_data = ['beschrijving', 'aantal', 'eenheid', 'tarief', 'BTW', 'Totaal']
+
+data = [['Uren', f'{uren}', 'uur', f'{kosten_uren}', '21%', f'{uren_btw}', f'{uren_prijs_totaal}'],
         ['Producten', f'{producten}', 'stuk', f'{kosten_product}', '21%', f'{producten_btw}', f'{producten_prijs_totaal}']]
 
 # Create instance of FPDF class
@@ -71,9 +74,34 @@ for row in data:
         pdf.cell(27, 10, txt=item, border=1)
     pdf.ln()
 
-pdf.cell(170, 5, txt="Bedrag excl BTW: ", ln=True, align='R') 
-pdf.cell(170, 5, txt="BTW: ", ln=True, align='R')
-pdf.cell(170, 5, txt="Totaal bedrag: ", ln=True, align='R')
+# Add totals below the table with proper alignment
+pdf.set_y(140)  # Aanpassen van de y-positie na de tabel
+pdf.set_font("Arial", 'B',  size=12) 
+
+right_column_width = 40  # Stel de breedte van de rechterkolom in
+left_column_width = 150  # Stel de breedte van de linkerkolom in
+
+# Bedrag exclusief BTW
+pdf.cell(left_column_width, 10, txt="Bedrag excl. BTW:", align='R')
+pdf.set_font("Arial", size=12) 
+pdf.cell(right_column_width, 10, txt=f"{beide_prijs}", ln=True, align='R')
+
+# BTW
+pdf.set_font("Arial", 'B',  size=12) 
+pdf.cell(left_column_width, 10, txt="BTW:", align='R')
+pdf.set_font("Arial", size=12)
+pdf.cell(right_column_width, 10, txt=f"{beide_btw}", ln=True, align='R')
+
+# Totaal bedrag
+pdf.set_font("Arial", 'B',  size=12) 
+pdf.cell(left_column_width, 10, txt="Totaal bedrag:", align='R')
+pdf.set_font("Arial", size=12)
+pdf.cell(right_column_width, 10, txt=f"{beide_prijs_totaal}", ln=True, align='R')
+
+
+# pdf.cell(170, 5, txt=f"Bedrag excl BTW: {beide_prijs}", ln=True, align='R') 
+# pdf.cell(170, 5, txt=f"BTW: {beide_btw}", ln=True, align='R')
+# pdf.cell(170, 5, txt=f"Totaal bedrag: {beide_prijs_totaal}", ln=True, align='R')
 
 #Voegt een horizontale lijn onderaan de pagina toe
 pdf.set_draw_color(0, 0, 0)  
