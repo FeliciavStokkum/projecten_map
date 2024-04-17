@@ -29,10 +29,9 @@ beide_prijs_totaal = round(uren_prijs_totaal + producten_prijs_totaal, 2)
 
 vervaldatum = datum
 logo_afbeelding = 'afbeeldingen/factuur_enzo_logo.png'
-
 data = [['Beschrijving', 'Aantal', 'Eenheid', 'Tarief', 'BTW%', 'BTW', 'Totaal'],
-        ['Uren', f'{uren}', 'uur', f'{kosten_uren}', '21%', f'{uren_btw}', f'{uren_prijs_totaal}'],
-        ['Producten', f'{producten}', 'stuk', f'{kosten_product}', '21%', f'{producten_btw}', f'{producten_prijs_totaal}']]
+        ['Uren', f'{uren}', 'uur', f'{kosten_uren} EUR', '21%', f'{uren_btw} EUR', f'{uren_prijs_totaal} EUR'],
+        ['Producten', f'{producten}', 'stuk', f'{kosten_product} EUR', '21%', f'{producten_btw} EUR', f'{producten_prijs_totaal} EUR']]
 
 # Create instance of FPDF class
 pdf = FPDF()
@@ -73,9 +72,9 @@ for row in data:
         pdf.cell(27, 10, txt=item, border=1)
     pdf.ln()
 
-pdf.cell(170, 5, txt=f"Bedrag excl BTW: {beide_prijs}", ln=True, align='R') 
-pdf.cell(170, 5, txt=f"BTW: {beide_btw}", ln=True, align='R')
-pdf.cell(170, 5, txt=f"Totaal bedrag: {beide_prijs_totaal}", ln=True, align='R')
+pdf.cell(170, 5, txt=f"Bedrag excl BTW: {beide_prijs} EUR", ln=True, align='R') 
+pdf.cell(170, 5, txt=f"BTW: {beide_btw} EUR", ln=True, align='R')
+pdf.cell(170, 5, txt=f"Totaal bedrag: {beide_prijs_totaal} EUR", ln=True, align='R')
 
 #Voegt een horizontale lijn onderaan de pagina toe
 pdf.set_draw_color(0, 0, 0)  
