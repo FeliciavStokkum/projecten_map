@@ -1,10 +1,13 @@
 from fpdf import FPDF
 import json
 from datetime import *
+import os
+import shutil
 
 pdf = FPDF()
 pdf.add_page()
-data_json = json.load(open('Felicia/test_set_softwareleverancier/2000-018.json'))
+naam_factuur = f"2000-067.json"
+data_json = json.load(open(f'Felicia/JSON_IN/test_set_softwareleverancier/{naam_factuur}'))
 
 # datum factuur
 dag, maand, jaar = data_json["order"]["orderdatum"].split('-')
@@ -132,7 +135,7 @@ pdf.line(10, y_position, 200, y_position)
 
 # Stel de positie in net onder de getekende lijn
 pdf.set_y(y_position + 5)
-# Voeg tekst toe onder de lijn
+#Info over het bedrijf
 pdf.set_font("Arial", 'B', 8)
 pdf.cell(0, 5, 'Factuur enzo', ln=True)
 pdf.set_font("Arial", size=8) 
@@ -158,5 +161,30 @@ pdf.cell(0, 5, 'Bank: RaboBank', ln=True, align='R')
 pdf.cell(0, 5, 'BIC nummer: RABONL2U', ln=True, align='R')
 pdf.cell(0, 5, 'IBAN nummer: NL44 RABO 0123 4567 89', ln=True, align='R')
 
-#De PDF wordt opgeslagen
-pdf.output("my_pdf_Felicia.pdf")
+#Hier staan de JSON documenten
+json_pad = "C:/School/Code/projecten_map/Felicia/JSON_IN/test_set_softwareleverancier"
+
+#Hier gaan de JSON documenten heen
+verwerkingsmap = "C:/School/Code/projecten_map/Felicia/JSON_PROCESSED"
+
+#naam van het bestand
+json_bestand = f"{naam_factuur}"
+
+#hier wordt het bestand toegevoegd aan het pad
+json_volledig_pad = os.path.join(json_pad, json_bestand)
+
+#Lees het JSON bestand
+with open(json_volledig_pad, 'r') as file:
+    data = json.load(file)
+
+#verplaats het gemaakte factuur naar de map invoice
+doelmap = "C:/School/Code/projecten_map/Felicia/INVOICE"
+if not os.path.exists(doelmap):
+    os.makedirs(doelmap)
+volledig_pad = os.path.join(doelmap, naam_factuur)
+
+#Verplaats het bestand naar de map PROCESSED
+shutil.move(json_volledig_pad, os.path.join(verwerkingsmap, json_bestand))
+
+#Hier wordt de pdf aangemaakt en naar de map invoice verplaatst
+pdf.output(f"{volledig_pad}.pdf")
