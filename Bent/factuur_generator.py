@@ -51,6 +51,9 @@ for item in data_json["factuur"]["producten"]:
     data.append(['Producten', f'{item["aantal"]}', f'{productnaam}', f'{round(100 / item["prijs_per_stuk_excl_btw"] * item["btw_per_stuk"], 2)}', f'{item["btw_per_stuk"]}', f'{item["prijs_per_stuk_excl_btw"]}', f'{round(item["aantal"] * (item["prijs_per_stuk_excl_btw"] + item["btw_per_stuk"]), 2)}'])
 bedrag_btw = round(bedrag_btw, 2)
 bedrag_totaal = round(bedrag_excl_btw + bedrag_btw, 2)
+data.append([' ', ' ', ' ', ' ', ' ', 'Bedrag excl BTW:', f'{bedrag_excl_btw}'])
+data.append([' ', ' ', ' ', ' ', ' ', 'BTW:', f'{bedrag_btw}'])
+data.append([' ', ' ', ' ', ' ', ' ', 'Totaal bedrag:', f'{bedrag_totaal}'])
 # Create instance of FPDF class
 pdf = FPDF()
 
