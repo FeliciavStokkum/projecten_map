@@ -6,7 +6,7 @@ from datetime import *
 
 pdf = FPDF()
 pdf.add_page()
-data_json = json.load(open('Bent/test_set_PC/2000-385.json'))
+data_json = json.load(open('Bent/test_set_PC/2000-185.json'))
 
 # datum factuur
 dag, maand, jaar = data_json["factuur"]["factuurdatum"].split('-')
