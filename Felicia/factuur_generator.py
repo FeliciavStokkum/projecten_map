@@ -6,7 +6,7 @@ import shutil
 
 pdf = FPDF()
 pdf.add_page()
-naam_factuur = f"2000-067.json"
+naam_factuur = f"2000-248.json"
 input_json_pad = 'Felicia/JSON_IN/test_set_PC/'
 data_json = json.load(open(f'Felicia/JSON_IN/test_set_PC/{naam_factuur}'))
 
@@ -157,11 +157,13 @@ pdf.cell(0, 5, 'BIC nummer: RABONL2U', ln=True, align='R')
 pdf.cell(0, 5, 'IBAN nummer: NL44 RABO 0123 4567 89', ln=True, align='R')
 
 output_json_pad = "Felicia/INVOICE/"
-if not os.path.exists(output_json_pad):
-    os.makedirs(output_json_pad)
 
+json_output_path = os.path.join(output_json_pad, f"JSON_factuur: {naam_factuur}.json")
 with open(os.path.join(output_json_pad, naam_factuur), 'w') as json_file:
     json.dump(data_json, json_file, indent=4)
+
+if not os.path.exists(output_json_pad):
+    os.makedirs(output_json_pad)
 
 pdf_output_pad = "Felicia/INVOICE/"
 if not os.path.exists(pdf_output_pad):
