@@ -6,8 +6,8 @@ import shutil
 
 pdf = FPDF()
 pdf.add_page()
-naam_factuur = f"2000-067.json"
-data_json = json.load(open(f'Felicia/JSON_IN/test_set_softwareleverancier/{naam_factuur}'))
+naam_factuur = f"2000-015.json"
+data_json = json.load(open(f'Felicia/JSON_IN/order/{naam_factuur}'))
 
 # datum factuur
 dag, maand, jaar = data_json["order"]["orderdatum"].split('-')
@@ -43,7 +43,6 @@ logo_afbeelding = 'afbeeldingen/factuur_enzo_logo.png'
 data = [['Beschrijving', '  Aantal', 'Product', 'BTW%', 'BTW', 'excl BTW', 'Totaal']]
 
 for item in data_json["order"]["producten"]:
-
     # bedrag_excl_btw += item["prijs_per_stuk_excl_btw"]
     # bedrag_btw += item["btw_per_stuk"]
     # bedrag_totaal += round(item["aantal"] * (item["prijs_per_stuk_excl_btw"] + item["btw_per_stuk"]), 2)
@@ -51,13 +50,12 @@ for item in data_json["order"]["producten"]:
     y_position_verti += 10
     y_pos += 10
 
-    # data.append(['Producten', item["aantal"], f'{item["productnaam"]}', round(100 / item["prijs_per_stuk_excl_btw"] * item["btw_per_stuk"], 2), item["btw_per_stuk"], item["prijs_per_stuk_excl_btw"], round(item["aantal"] * (item["prijs_per_stuk_excl_btw"] + item["btw_per_stuk"]), 2)])
-# bedrag_btw = round(bedrag_btw, 2)
+    data.append(['Producten', item["aantal"], f'{item["productnaam"]}', round(100 / item["prijs_per_stuk_excl_btw"] * item["btw_per_stuk"], 2), item["btw_per_stuk"], item["prijs_per_stuk_excl_btw"], round(item["aantal"] * (item["prijs_per_stuk_excl_btw"] + item["btw_per_stuk"]), 2)])
 
-# data.append([' ', ' ', ' ', ' ', ' ', ' ', ' '])
-# data.append([' ', ' ', ' ', ' ', 'Bedrag excl BTW:', ' ', data_json["factuur"]["totaal_excl_btw"]])
-# data.append([' ', ' ', ' ', ' ', 'BTW:', ' ', data_json["factuur"]["totaal_btw"]])
-# data.append([' ', ' ', ' ', ' ', 'Totaal bedrag:', ' ', data_json["factuur"]["totaal_incl_btw"]])
+data.append([' ', ' ', ' ', ' ', ' ', ' ', ' '])
+data.append([' ', ' ', ' ', ' ', 'Bedrag excl BTW:', ' ', data_json["factuur"]["totaal_excl_btw"]])
+data.append([' ', ' ', ' ', ' ', 'BTW:', ' ', data_json["factuur"]["totaal_btw"]])
+data.append([' ', ' ', ' ', ' ', 'Totaal bedrag:', ' ', data_json["factuur"]["totaal_incl_btw"]])
 
 
 #fonts en overal tekst
@@ -162,7 +160,7 @@ pdf.cell(0, 5, 'BIC nummer: RABONL2U', ln=True, align='R')
 pdf.cell(0, 5, 'IBAN nummer: NL44 RABO 0123 4567 89', ln=True, align='R')
 
 #Hier staan de JSON documenten
-json_pad = "C:/School/Code/projecten_map/Felicia/JSON_IN/test_set_softwareleverancier"
+json_pad = "C:/School/Code/projecten_map/Felicia/JSON_IN/order"
 
 #Hier gaan de JSON documenten heen
 verwerkingsmap = "C:/School/Code/projecten_map/Felicia/JSON_PROCESSED"
@@ -184,7 +182,7 @@ if not os.path.exists(doelmap):
 volledig_pad = os.path.join(doelmap, naam_factuur)
 
 #Verplaats het bestand naar de map PROCESSED
-shutil.move(json_volledig_pad, os.path.join(verwerkingsmap, json_bestand))
+shutil.move(f"Felicia/JSON_IN/order/{naam_factuur}", f"Felicia/JSON_PROCESSED/{naam_factuur}")
 
 #Hier wordt de pdf aangemaakt en naar de map invoice verplaatst
-pdf.output(f"{volledig_pad}.pdf")
+pdf.output(f"Felicia/INVOICE/{naam_factuur.replace('.json', '.pdf')}")
