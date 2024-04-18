@@ -107,7 +107,7 @@ for row in data:
                     plaats = 'L'
                     pass
                 else:
-                    pdf.set_font("Arial", size=7)
+                    pdf.set_font("Arial", size=9)
                     counter += 1
         else:
             pdf.set_font("Arial", size=12)
