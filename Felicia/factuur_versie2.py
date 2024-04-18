@@ -4,25 +4,25 @@ from datetime import *
 
 pdf = FPDF()
 pdf.add_page()
-data_json = json.load(open('Felicia/test_set_softwareleverancier/2000-018.json'))
+data_json = json.load(open('Bent/test_set_PC/2000-961.json'))
 
 # datum factuur
-dag, maand, jaar = data_json["order"]["orderdatum"].split('-')
+dag, maand, jaar = data_json["factuur"]["factuurdatum"].split('-')
 dag = int(dag)
 maand = int(maand)
 jaar = int(jaar)
 datum = datetime(jaar, maand, dag)
 
 # klanrt factuur info/data
-naam = data_json["order"]["klant"]["naam"]
-kvk_nummer = data_json["order"]["klant"]["KVK-nummer"]
-ordernummer = data_json["order"]["ordernummer"]
-factuur_adres = data_json["order"]["klant"]["adres"]
-factuur_postcode = data_json["order"]["klant"]["postcode"]
-factuur_stad = data_json["order"]["klant"]["stad"]
+naam = data_json["factuur"]["klant"]["naam"]
+kvk_nummer = data_json["factuur"]["klant"]["KVK-nummer"]
+factuurnummer = data_json["factuur"]["factuurnummer"]
+factuur_adres = data_json["factuur"]["klant"]["adres"]
+factuur_postcode = data_json["factuur"]["klant"]["postcode"]
+factuur_stad = data_json["factuur"]["klant"]["stad"]
 
 # tijd
-betaaltermijn_str = data_json["order"]["betaaltermijn"]
+betaaltermijn_str = data_json["factuur"]["betaaltermijn"]
 betaaltermijn_dagen = int(betaaltermijn_str.split('-')[0])
 
 # bedragen berekening
@@ -39,7 +39,7 @@ vervaldatum = datum + timedelta(days=betaaltermijn_dagen)
 logo_afbeelding = 'afbeeldingen/factuur_enzo_logo.png'
 data = [['Beschrijving', '  Aantal', 'Product', 'BTW%', 'BTW', 'excl BTW', 'Totaal']]
 
-for item in data_json["order"]["producten"]:
+for item in data_json["factuur"]["producten"]:
 
     # bedrag_excl_btw += item["prijs_per_stuk_excl_btw"]
     # bedrag_btw += item["btw_per_stuk"]
@@ -48,13 +48,13 @@ for item in data_json["order"]["producten"]:
     y_position_verti += 10
     y_pos += 10
 
-    # data.append(['Producten', item["aantal"], f'{item["productnaam"]}', round(100 / item["prijs_per_stuk_excl_btw"] * item["btw_per_stuk"], 2), item["btw_per_stuk"], item["prijs_per_stuk_excl_btw"], round(item["aantal"] * (item["prijs_per_stuk_excl_btw"] + item["btw_per_stuk"]), 2)])
+    data.append(['Producten', item["aantal"], f'{item["productnaam"]}', round(100 / item["prijs_per_stuk_excl_btw"] * item["btw_per_stuk"], 2), item["btw_per_stuk"], item["prijs_per_stuk_excl_btw"], round(item["aantal"] * (item["prijs_per_stuk_excl_btw"] + item["btw_per_stuk"]), 2)])
 # bedrag_btw = round(bedrag_btw, 2)
 
-# data.append([' ', ' ', ' ', ' ', ' ', ' ', ' '])
-# data.append([' ', ' ', ' ', ' ', 'Bedrag excl BTW:', ' ', data_json["factuur"]["totaal_excl_btw"]])
-# data.append([' ', ' ', ' ', ' ', 'BTW:', ' ', data_json["factuur"]["totaal_btw"]])
-# data.append([' ', ' ', ' ', ' ', 'Totaal bedrag:', ' ', data_json["factuur"]["totaal_incl_btw"]])
+data.append([' ', ' ', ' ', ' ', ' ', ' ', ' '])
+data.append([' ', ' ', ' ', ' ', 'Bedrag excl BTW:', ' ', data_json["factuur"]["totaal_excl_btw"]])
+data.append([' ', ' ', ' ', ' ', 'BTW:', ' ', data_json["factuur"]["totaal_btw"]])
+data.append([' ', ' ', ' ', ' ', 'Totaal bedrag:', ' ', data_json["factuur"]["totaal_incl_btw"]])
 
 
 #fonts en overal tekst
@@ -88,7 +88,7 @@ vervaldatum, y = vervaldatum.split(" ")
 
 pdf.set_y(70)
 pdf.cell(200, 6, txt = f"Datum: {datum}", ln = True, align = 'L')
-pdf.cell(200, 6, txt = f"factuurnummer: {ordernummer}", ln = True, align = 'L')
+pdf.cell(200, 6, txt = f"factuurnummer: {factuurnummer}", ln = True, align = 'L')
 pdf.cell(200, 6, txt = f"Verval datum: {vervaldatum}", ln = True, align = 'L')
 pdf.cell(200, 6, txt = f"KVK nummer: {kvk_nummer}", ln = True, align = 'L')
 
