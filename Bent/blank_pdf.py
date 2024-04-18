@@ -6,8 +6,8 @@ factuurnummer = input("Wat is het factuurnummer: ")
 factuur_adres = input("Wat is het factuur adres: ")
 logo_afbeelding = 'afbeeldingen/factuur_enzo_logo.png'
 data = [['Beschrijving', 'Aantal', 'Eenheid', 'Tarief', 'BTW%', 'BTW', 'Totaal'],
-        ['Werk', 'xxx', 'uur', '€xx', 'xx%', '€xx', '€xx'],
-        ['Producten', 'xxx', 'stuk', '€xx', 'xx%', '€xx', '€xx']]
+        ['Werk', 'xxx', 'uur', 'xx', 'xx%', 'xx', 'xx'],
+        ['Producten', 'xxx', 'stuk', 'xx', 'xx%', 'xx', 'xx']]
 
 # Create instance of FPDF class
 pdf = FPDF()
@@ -47,4 +47,4 @@ for row in data:
     pdf.ln()
 
 # Save the PDF
-pdf.output("blank_pdf.pdf")
+pdf.output("blank.pdf")

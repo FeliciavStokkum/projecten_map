@@ -1,30 +1,31 @@
-#Qr code maken
-#opmaak verbeteren
 from fpdf import FPDF
 import json
 from datetime import *
+import os
+import shutil
 
 pdf = FPDF()
 pdf.add_page()
-data_json = json.load(open('Bent/test_set_PC/2000-150.json'))
+naam_factuur = f"2000-015.json"
+data_json = json.load(open(f'Felicia/JSON_IN/order/{naam_factuur}'))
 
 # datum factuur
-dag, maand, jaar = data_json["factuur"]["factuurdatum"].split('-')
+dag, maand, jaar = data_json["order"]["orderdatum"].split('-')
 dag = int(dag)
 maand = int(maand)
 jaar = int(jaar)
 datum = datetime(jaar, maand, dag)
 
 # klanrt factuur info/data
-naam = data_json["factuur"]["klant"]["naam"]
-kvk_nummer = data_json["factuur"]["klant"]["KVK-nummer"]
-factuurnummer = data_json["factuur"]["factuurnummer"]
-factuur_adres = data_json["factuur"]["klant"]["adres"]
-factuur_postcode = data_json["factuur"]["klant"]["postcode"]
-factuur_stad = data_json["factuur"]["klant"]["stad"]
+naam = data_json["order"]["klant"]["naam"]
+kvk_nummer = data_json["order"]["klant"]["KVK-nummer"]
+ordernummer = data_json["order"]["ordernummer"]
+factuur_adres = data_json["order"]["klant"]["adres"]
+factuur_postcode = data_json["order"]["klant"]["postcode"]
+factuur_stad = data_json["order"]["klant"]["stad"]
 
 # tijd
-betaaltermijn_str = data_json["factuur"]["betaaltermijn"]
+betaaltermijn_str = data_json["order"]["betaaltermijn"]
 betaaltermijn_dagen = int(betaaltermijn_str.split('-')[0])
 
 # bedragen berekening
@@ -41,8 +42,7 @@ vervaldatum = datum + timedelta(days=betaaltermijn_dagen)
 logo_afbeelding = 'afbeeldingen/factuur_enzo_logo.png'
 data = [['Beschrijving', '  Aantal', 'Product', 'BTW%', 'BTW', 'excl BTW', 'Totaal']]
 
-for item in data_json["factuur"]["producten"]:
-
+for item in data_json["order"]["producten"]:
     # bedrag_excl_btw += item["prijs_per_stuk_excl_btw"]
     # bedrag_btw += item["btw_per_stuk"]
     # bedrag_totaal += round(item["aantal"] * (item["prijs_per_stuk_excl_btw"] + item["btw_per_stuk"]), 2)
@@ -51,7 +51,6 @@ for item in data_json["factuur"]["producten"]:
     y_pos += 10
 
     data.append(['Producten', item["aantal"], f'{item["productnaam"]}', round(100 / item["prijs_per_stuk_excl_btw"] * item["btw_per_stuk"], 2), item["btw_per_stuk"], item["prijs_per_stuk_excl_btw"], round(item["aantal"] * (item["prijs_per_stuk_excl_btw"] + item["btw_per_stuk"]), 2)])
-# bedrag_btw = round(bedrag_btw, 2)
 
 data.append([' ', ' ', ' ', ' ', ' ', ' ', ' '])
 data.append([' ', ' ', ' ', ' ', 'Bedrag excl BTW:', ' ', data_json["factuur"]["totaal_excl_btw"]])
@@ -90,7 +89,7 @@ vervaldatum, y = vervaldatum.split(" ")
 
 pdf.set_y(70)
 pdf.cell(200, 6, txt = f"Datum: {datum}", ln = True, align = 'L')
-pdf.cell(200, 6, txt = f"factuurnummer: {factuurnummer}", ln = True, align = 'L')
+pdf.cell(200, 6, txt = f"factuurnummer: {ordernummer}", ln = True, align = 'L')
 pdf.cell(200, 6, txt = f"Verval datum: {vervaldatum}", ln = True, align = 'L')
 pdf.cell(200, 6, txt = f"KVK nummer: {kvk_nummer}", ln = True, align = 'L')
 
@@ -134,7 +133,7 @@ pdf.line(10, y_position, 200, y_position)
 
 # Stel de positie in net onder de getekende lijn
 pdf.set_y(y_position + 5)
-# Voeg tekst toe onder de lijn
+#Info over het bedrijf
 pdf.set_font("Arial", 'B', 8)
 pdf.cell(0, 5, 'Factuur enzo', ln=True)
 pdf.set_font("Arial", size=8) 
@@ -160,5 +159,30 @@ pdf.cell(0, 5, 'Bank: RaboBank', ln=True, align='R')
 pdf.cell(0, 5, 'BIC nummer: RABONL2U', ln=True, align='R')
 pdf.cell(0, 5, 'IBAN nummer: NL44 RABO 0123 4567 89', ln=True, align='R')
 
-#De PDF wordt opgeslagen
-pdf.output("tweede_factuur.pdf")
+#Hier staan de JSON documenten
+json_pad = "C:/School/Code/projecten_map/Felicia/JSON_IN/order"
+
+#Hier gaan de JSON documenten heen
+verwerkingsmap = "C:/School/Code/projecten_map/Felicia/JSON_PROCESSED"
+
+#naam van het bestand
+json_bestand = f"{naam_factuur}"
+
+#hier wordt het bestand toegevoegd aan het pad
+json_volledig_pad = os.path.join(json_pad, json_bestand)
+
+#Lees het JSON bestand
+with open(json_volledig_pad, 'r') as file:
+    data = json.load(file)
+
+#verplaats het gemaakte factuur naar de map invoice
+doelmap = "C:/School/Code/projecten_map/Felicia/INVOICE"
+if not os.path.exists(doelmap):
+    os.makedirs(doelmap)
+volledig_pad = os.path.join(doelmap, naam_factuur)
+
+#Verplaats het bestand naar de map PROCESSED
+shutil.move(f"Felicia/JSON_IN/order/{naam_factuur}", f"Felicia/JSON_PROCESSED/{naam_factuur}")
+
+#Hier wordt de pdf aangemaakt en naar de map invoice verplaatst
+pdf.output(f"Felicia/INVOICE/{naam_factuur.replace('.json', '.pdf')}")
