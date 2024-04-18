@@ -6,7 +6,7 @@ from datetime import *
 
 pdf = FPDF()
 pdf.add_page()
-data_json = json.load(open('Bent/test_set_PC/2000-961.json'))
+data_json = json.load(open('Bent/test_set_PC/2000-886.json'))
 
 # datum factuur
 dag, maand, jaar = data_json["factuur"]["factuurdatum"].split('-')
@@ -161,4 +161,4 @@ pdf.cell(0, 5, 'BIC nummer: RABONL2U', ln=True, align='R')
 pdf.cell(0, 5, 'IBAN nummer: NL44 RABO 0123 4567 89', ln=True, align='R')
 
 #De PDF wordt opgeslagen
-pdf.output("derde_factuur.pdf")
+pdf.output("fac_gen.pdf")
