@@ -6,7 +6,7 @@ import shutil
 
 pdf = FPDF()
 pdf.add_page()
-naam_factuur = f"2000-132.json"
+naam_factuur = f"2000-466.json"
 input_json_pad = 'Felicia/JSON_IN/test_set_PC/'
 data_json = json.load(open(f'Felicia/JSON_IN/test_set_PC/{naam_factuur}'))
 
@@ -39,6 +39,8 @@ y_pos = 110
 
 vervaldatum = datum + timedelta(days=betaaltermijn_dagen)
 
+producten_lijst = []
+
 # data
 logo_afbeelding = 'afbeeldingen/factuur_enzo_logo.png'
 data = [['Product', '  ', 'Aantal', 'BTW%', 'BTW', 'excl BTW', 'Totaal']]
@@ -46,7 +48,7 @@ data = [['Product', '  ', 'Aantal', 'BTW%', 'BTW', 'excl BTW', 'Totaal']]
 for item in data_json["factuur"]["producten"]:
     y_position_verti += 10
     y_pos += 10
-
+    producten_lijst.append(item["productnaam"])
     data.append([f'{item["productnaam"]}', ' ', item["aantal"], round(100 / item["prijs_per_stuk_excl_btw"] * item["btw_per_stuk"], 2), item["btw_per_stuk"], item["prijs_per_stuk_excl_btw"], round(item["aantal"] * (item["prijs_per_stuk_excl_btw"] + item["btw_per_stuk"]), 2)])
 
 data.append([' ', ' ', ' ', ' ', ' ', ' ', ' '])
@@ -98,12 +100,14 @@ for row in data:
     for item in row:
         if isinstance(item, str):
             pdf.set_font("Arial", 'B',  size=12)
-            if len(item) >= 14:
+            if len(item) >= 14 or item == 'Product':
                 if counter >= len(data_json["factuur"]["producten"]):
                     plaats = 'L'
-                    pass
+                elif item == 'Product':
+                    plaats = 'L'
                 else:
-                    pdf.set_font("Arial", size=7)
+                    plaats = 'L'
+                    pdf.set_font("Arial",'B', size=10)
                     counter += 1
         else:
             pdf.set_font("Arial", size=12)
