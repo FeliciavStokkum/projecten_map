@@ -41,13 +41,13 @@ vervaldatum = datum + timedelta(days=betaaltermijn_dagen)
 
 # data
 logo_afbeelding = 'afbeeldingen/factuur_enzo_logo.png'
-data = [['Beschrijving', '  Aantal', 'Product', 'BTW%', 'BTW', 'excl BTW', 'Totaal']]
+data = [['Product', '  ', 'Aantal', 'BTW%', 'BTW', 'excl BTW', 'Totaal']]
 
 for item in data_json["factuur"]["producten"]:
     y_position_verti += 10
     y_pos += 10
 
-    data.append(['Producten', item["aantal"], f'{item["productnaam"]}', round(100 / item["prijs_per_stuk_excl_btw"] * item["btw_per_stuk"], 2), item["btw_per_stuk"], item["prijs_per_stuk_excl_btw"], round(item["aantal"] * (item["prijs_per_stuk_excl_btw"] + item["btw_per_stuk"]), 2)])
+    data.append([f'{item["productnaam"]}', ' ', item["aantal"], round(100 / item["prijs_per_stuk_excl_btw"] * item["btw_per_stuk"], 2), item["btw_per_stuk"], item["prijs_per_stuk_excl_btw"], round(item["aantal"] * (item["prijs_per_stuk_excl_btw"] + item["btw_per_stuk"]), 2)])
 
 data.append([' ', ' ', ' ', ' ', ' ', ' ', ' '])
 data.append([' ', ' ', ' ', ' ', 'Bedrag excl BTW:', ' ', data_json["factuur"]["totaal_excl_btw"]])
